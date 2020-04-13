@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace FYPMobileApp.Models
 {
@@ -34,14 +34,17 @@ namespace FYPMobileApp.Models
         }
 
         //TODO
-        public async Task<string> PostRequest(object data)
+        public async Task<TResult> PostRequest <TResult>(object data)
         {
-            StringContent content = new StringContent(JsonSerializer.Serialize(data));
+            StringContent content = new StringContent(JsonConvert.SerializeObject(data));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var response = await client.PostAsync(client.BaseAddress + "userLogin", content);
             //response.EnsureSuccessStatusCode();
-            return response.Content.ReadAsStringAsync().Result;
+            string responseString = await response.Content.ReadAsStringAsync();
+            TResult result = JsonConvert.DeserializeObject<TResult>(responseString);
+            return result;
+            //return response.Content.ReadAsStringAsync().Result;
         }
     }
 }

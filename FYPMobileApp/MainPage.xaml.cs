@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using FYPMobileApp.Models;
+using FYPMobileApp.Responses;
+using FYPMobileApp.Services;
 
 namespace FYPMobileApp
 {
@@ -14,6 +16,7 @@ namespace FYPMobileApp
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
+        NavigationService navigator = new NavigationService();
         public MainPage()
         {
             InitializeComponent();
@@ -27,8 +30,12 @@ namespace FYPMobileApp
             loginParams.username = inputUsername.Text;
             loginParams.password = inputPassword.Text;
 
-            var s = await rest.PostRequest(loginParams);
-            centreLabel.Text = s;
+            LoginResponse response = await rest.PostRequest<LoginResponse>(loginParams);
+
+            if(response.UserId > 0)
+            {
+                navigator.navigateToFingerprintPage();
+            }
         }
     }
 }

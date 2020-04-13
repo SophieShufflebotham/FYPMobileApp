@@ -6,6 +6,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Plugin.Fingerprint;
+using Plugin.CurrentActivity;
 
 namespace FYPMobileApp.Droid
 {
@@ -14,6 +16,9 @@ namespace FYPMobileApp.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            CrossCurrentActivity.Current.Init(this, savedInstanceState);
+            CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
