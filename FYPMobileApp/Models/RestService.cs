@@ -15,7 +15,7 @@ namespace FYPMobileApp.Models
     {
         private HttpClient client;
 
-        private const string BaseUrl = "http://10.0.2.2:3000/users/";
+        private const string BaseUrl = "https://fypazureapp.azurewebsites.net/";
 
         public RestService()
         {
@@ -28,18 +28,18 @@ namespace FYPMobileApp.Models
 
         public async Task<string> GetRequest()
         {
-            var response = await client.GetAsync(client.BaseAddress + "allUsers");
+            var response = await client.GetAsync(client.BaseAddress + "/users/allUsers");
             //response.EnsureSuccessStatusCode();
             return response.Content.ReadAsStringAsync().Result;
         }
 
         //TODO
-        public async Task<TResult> PostRequest <TResult>(object data)
+        public async Task<TResult> PostLoginRequest <TResult>(object data)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(data));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var response = await client.PostAsync(client.BaseAddress + "userLogin", content);
+            var response = await client.PostAsync(client.BaseAddress + "/users/userLogin", content);
             //response.EnsureSuccessStatusCode();
             string responseString = await response.Content.ReadAsStringAsync();
             TResult result = JsonConvert.DeserializeObject<TResult>(responseString);

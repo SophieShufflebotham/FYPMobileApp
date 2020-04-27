@@ -30,10 +30,11 @@ namespace FYPMobileApp
             loginParams.username = inputUsername.Text;
             loginParams.password = inputPassword.Text;
 
-            LoginResponse response = await rest.PostRequest<LoginResponse>(loginParams);
+            LoginResponse response = await rest.PostLoginRequest<LoginResponse>(loginParams);
 
             if(response.UserId > 0)
             {
+                Application.Current.Properties["UserId"] = response.UserId.ToString();
                 navigator.navigateToFingerprintPage();
             }
         }

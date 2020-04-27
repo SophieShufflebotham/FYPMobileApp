@@ -7,9 +7,7 @@
              x:Class="FYPMobileApp.Views.FingerprintAuthenticationPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Authenticate Fingerprint" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="AuthenticateFingerprint"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
