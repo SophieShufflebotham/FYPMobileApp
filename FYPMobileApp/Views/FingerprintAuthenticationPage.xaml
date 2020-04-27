@@ -8,6 +8,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Button Text="Authenticate Fingerprint" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="AuthenticateFingerprint"/>
+            <Button Text="Emergency - Mark as Safe" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Clicked="MarkAsSafe"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

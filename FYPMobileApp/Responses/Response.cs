@@ -7,7 +7,8 @@ using System.Text.Json;
 
 namespace FYPMobileApp.Responses
 {
-    class Response
+    public class Response
     {
+        public string userId;
     }
 }

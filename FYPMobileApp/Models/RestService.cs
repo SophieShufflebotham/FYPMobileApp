@@ -46,5 +46,13 @@ namespace FYPMobileApp.Models
             return result;
             //return response.Content.ReadAsStringAsync().Result;
         }
+
+        public void PostSafetyStatus(object data)
+        {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(data));
+            Console.WriteLine($"content: {content}");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            client.PostAsync(client.BaseAddress + "/accessTimes/markAsSafe", content);
+        }
     }
 }

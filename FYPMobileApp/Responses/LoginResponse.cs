@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FYPMobileApp.Responses
 {
-    class LoginResponse : Response
+    class LoginResponse
     {
         public int UserId;
         public bool Valid;

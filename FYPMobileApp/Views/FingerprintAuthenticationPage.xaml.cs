@@ -8,6 +8,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Plugin.Fingerprint.Abstractions;
 using FYPMobileApp.Services;
+using FYPMobileApp.Models;
+using FYPMobileApp.Responses;
 
 namespace FYPMobileApp.Views
 {
@@ -26,22 +28,26 @@ namespace FYPMobileApp.Views
 
             var request = new AuthenticationRequestConfiguration("Prove you have fingers!");
             var result = await Plugin.Fingerprint.CrossFingerprint.Current.AuthenticateAsync(request);
-            //DEBUG
-
 
             if (result.Authenticated)
             {
-                // do secret stuff :)
-                //await Application.Current.MainPage.DisplayAlert("Error", $"Verified", "OK");
                 Application.Current.Properties["AuthStatus"] = result;
                 navigator.navigateToNfcPage();
                 
             }
             else
             {
-                // not allowed to do secret stuff :(
                 await Application.Current.MainPage.DisplayAlert("Error", $"Not authenticated", "OK");
             }
+        }
+
+        protected void MarkAsSafe(object sender, System.EventArgs e)
+        {
+            RestService service = new RestService();
+            string userId = Application.Current.Properties["UserId"] as string;
+            Response param = new Response();
+            param.userId = userId;
+            service.PostSafetyStatus(param);
         }
     }
 }
