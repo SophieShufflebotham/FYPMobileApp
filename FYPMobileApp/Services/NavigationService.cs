@@ -20,7 +20,7 @@ namespace FYPMobileApp.Services
 
         public async void navigateToNfcPage()
         {
-            await Application.Current.MainPage.DisplayAlert("Navigator", $"This is where navigation would be, if I had one", "OK");
+            //await Application.Current.MainPage.DisplayAlert("Navigator", $"This is where navigation would be, if I had one", "OK");
         }
     }
 }

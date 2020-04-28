@@ -9,7 +9,7 @@ namespace FYPMobileApp
     public partial class App : Application
     {
         public static Stopwatch FINGERPRINT_TIMEOUT = new Stopwatch();
-        private static int defaultTimespan = 25;
+        private static int defaultTimespan = 30;
         public App()
         {
             InitializeComponent();

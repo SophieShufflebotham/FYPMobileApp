@@ -31,6 +31,7 @@ namespace FYPMobileApp.Views
 
             if (result.Authenticated)
             {
+                App.FINGERPRINT_TIMEOUT.Restart();
                 Application.Current.Properties["AuthStatus"] = result;
                 navigator.navigateToNfcPage();
                 
