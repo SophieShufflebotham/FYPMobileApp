@@ -8,7 +8,7 @@
 
     <StackLayout>
         <!-- Place new controls here -->
-        <Label x:Name="centreLabel" Text=" Response Content" 
+        <Label x:Name="centreLabel" Text=" Welcome! Please log in" 
            HorizontalOptions="Center"
            VerticalOptions="CenterAndExpand" />
         

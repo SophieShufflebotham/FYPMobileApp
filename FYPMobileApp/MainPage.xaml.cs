@@ -18,7 +18,7 @@ namespace FYPMobileApp
     {
         NavigationService navigator = new NavigationService();
         public MainPage()
-        {
+        {                 
             InitializeComponent();
         }
 
@@ -30,13 +30,33 @@ namespace FYPMobileApp
             loginParams.username = inputUsername.Text;
             loginParams.password = inputPassword.Text;
 
-            LoginResponse response = await rest.PostLoginRequest<LoginResponse>(loginParams);
-
-            if(response.UserId > 0)
+            if (inputUsername.Text.Length == 0 || inputPassword.Text.Length == 0)
             {
-                Application.Current.Properties["UserId"] = response.UserId.ToString();
-                navigator.navigateToFingerprintPage();
+                await DisplayAlert("Error", "Please ensure username and password are entered", "OK");
             }
+            else
+            {
+                LoginResponse response = await rest.PostLoginRequest<LoginResponse>(loginParams);
+
+                if (response.UserId > 0)
+                {
+                    Application.Current.Properties["UserId"] = response.UserId.ToString();
+                    navigator.navigateToFingerprintPage();
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Invalid username or password", "OK");
+                    inputUsername.Text = "";
+                    inputPassword.Text = "";
+                }
+            }
+        }
+
+        protected override void OnAppearing()
+        {
+            inputUsername.Text = "";
+            inputPassword.Text = "";
+            base.OnAppearing();
         }
     }
 }
