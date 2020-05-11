@@ -26,7 +26,7 @@ namespace FYPMobileApp.Views
         {
             var availableResult = await Plugin.Fingerprint.CrossFingerprint.Current.GetAvailabilityAsync();
 
-            var request = new AuthenticationRequestConfiguration("Prove you have fingers!");
+            var request = new AuthenticationRequestConfiguration("Please validate your fingerprint");
             var result = await Plugin.Fingerprint.CrossFingerprint.Current.AuthenticateAsync(request);
 
             if (result.Authenticated)
