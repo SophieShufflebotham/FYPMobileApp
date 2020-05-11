@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Plugin.Fingerprint.Abstractions;
+using FYPMobileApp.Services;
 
 namespace FYPMobileApp
 {
@@ -10,6 +11,7 @@ namespace FYPMobileApp
     {
         public static Stopwatch FINGERPRINT_TIMEOUT = new Stopwatch();
         private static int defaultTimespan = 30;
+        public static bool AlarmTriggered = false;
         public App()
         {
             InitializeComponent();
@@ -35,9 +37,14 @@ namespace FYPMobileApp
                         if (result.Authenticated)
                         {
                             bool removalStatus = Application.Current.Properties.Remove("AuthStatus");
+                            AlarmTriggered = true;
+                            NavigationService service = new NavigationService();
+
 
                             Device.BeginInvokeOnMainThread(async () => {
+                                service.returnToPrevious();
                                 await Application.Current.MainPage.DisplayAlert("Timeout", "Fingerprint timed out, please re-authenticate", "OK");
+
                             });
                         }
                     }

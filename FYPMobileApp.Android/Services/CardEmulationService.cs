@@ -15,7 +15,7 @@ using Android.Nfc.Tech;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint.Abstractions;
 using Xamarin.Forms;
-
+using FYPMobileApp.Services;
 
 namespace FYPMobileApp.Droid.Services
 {
@@ -92,12 +92,20 @@ MetaData("android.nfc.cardemulation.host_apdu_service", Resource = "@xml/aid_lis
                         byte[] payload = Encoding.UTF8.GetBytes(userId);
                         Console.WriteLine($"[CODE] Sending payload {payload}");
                         bool removalStatus = Xamarin.Forms.Application.Current.Properties.Remove("AuthStatus");
-                        return ConcatArrays(payload, SELECT_OK_SW);
+                        NavigationService service = new NavigationService();
+                        
+                        //Heavy assumption that we're on the NFC page for this function, because we *shouldn't* be anywhere else, as the hardware back button is disabled on the NFC page
+                        Device.BeginInvokeOnMainThread(async () => {
+                            service.returnToPrevious();
+                            await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Scan Success", "Scan completed, please check access point for information", "OK");
+                        });
+
+                    return ConcatArrays(payload, SELECT_OK_SW);
                     }
                     else
                     {
                         Device.BeginInvokeOnMainThread(async () => {
-                            await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Please authenticate fingerprint", "OK");
+                            await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Not Authenticated", "Please authenticate fingerprint before tapping to access point", "OK");
                         });
 
                         Console.WriteLine("Fingerprint failure");

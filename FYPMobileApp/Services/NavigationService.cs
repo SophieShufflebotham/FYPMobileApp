@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace FYPMobileApp.Services
 {
-    class NavigationService
+    public class NavigationService
     {
 
         public async void navigateToFingerprintPage()
@@ -20,7 +20,16 @@ namespace FYPMobileApp.Services
 
         public async void navigateToNfcPage()
         {
-            //await Application.Current.MainPage.DisplayAlert("Navigator", $"This is where navigation would be, if I had one", "OK");
+
+            NFCActivePage nfcPage = new NFCActivePage();
+            NavigationPage navPage = new NavigationPage(nfcPage);
+
+            await Application.Current.MainPage.Navigation.PushModalAsync(navPage);
+        }
+
+        public async void returnToPrevious()
+        {
+            await Application.Current.MainPage.Navigation.PopModalAsync();
         }
     }
 }
