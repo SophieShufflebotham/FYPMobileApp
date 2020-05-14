@@ -6,6 +6,7 @@ using Xamarin.Forms;
 
 namespace FYPMobileApp.Services
 {
+    //A straightforward class to handle all application navigation through small functions
     public class NavigationService
     {
 

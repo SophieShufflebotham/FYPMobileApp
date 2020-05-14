@@ -33,7 +33,6 @@ namespace FYPMobileApp.Models
             return response.Content.ReadAsStringAsync().Result;
         }
 
-        //TODO
         public async Task<TResult> PostLoginRequest <TResult>(object data)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(data));

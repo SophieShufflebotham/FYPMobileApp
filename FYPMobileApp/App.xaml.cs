@@ -25,7 +25,7 @@ namespace FYPMobileApp
             {
                 FINGERPRINT_TIMEOUT.Start();
             }
-
+            //Start a timer that 'ticks' every second
             Device.StartTimer(new TimeSpan(0, 0, 1), () =>
             {
                 if (FINGERPRINT_TIMEOUT.IsRunning && FINGERPRINT_TIMEOUT.Elapsed.Seconds >= defaultTimespan)
@@ -34,13 +34,13 @@ namespace FYPMobileApp
                     {
                         FingerprintAuthenticationResult result = Application.Current.Properties["AuthStatus"] as FingerprintAuthenticationResult;
 
-                        if (result.Authenticated)
+                        if (result.Authenticated) //The fingerprint can't timeout if it was never authenticated in the first place
                         {
                             bool removalStatus = Application.Current.Properties.Remove("AuthStatus");
                             AlarmTriggered = true;
                             NavigationService service = new NavigationService();
 
-
+                            //Due to hardware 'back' lockout on NFC page, user can't be anywhere else, so it's safe to use returnToPrevious and pop from the modal stack
                             Device.BeginInvokeOnMainThread(async () => {
                                 service.returnToPrevious();
                                 await Application.Current.MainPage.DisplayAlert("Timeout", "Fingerprint timed out, please re-authenticate", "OK");

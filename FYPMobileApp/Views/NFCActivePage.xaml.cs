@@ -21,6 +21,7 @@ namespace FYPMobileApp.Views
         }
 
         // Override hardware back button - lock user out of returning before timeout finishes
+        // This is the easiest way to avoid navigation issues whilst still allowing us to pop the page afterwards
         protected override bool OnBackButtonPressed()
         {
             return true;

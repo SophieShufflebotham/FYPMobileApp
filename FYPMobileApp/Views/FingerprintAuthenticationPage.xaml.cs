@@ -22,6 +22,7 @@ namespace FYPMobileApp.Views
             InitializeComponent();
         }
 
+        //Prompt the user to authenticate their fingerprint in response to the button;
         protected async void AuthenticateFingerprint(object sender, System.EventArgs e)
         {
             var availableResult = await Plugin.Fingerprint.CrossFingerprint.Current.GetAvailabilityAsync();
@@ -31,8 +32,8 @@ namespace FYPMobileApp.Views
 
             if (result.Authenticated)
             {
-                App.FINGERPRINT_TIMEOUT.Restart();
-                Application.Current.Properties["AuthStatus"] = result;
+                App.FINGERPRINT_TIMEOUT.Restart(); //If we're authenticated, start the 30 second countdown timer
+                Application.Current.Properties["AuthStatus"] = result; //Write the authentication result to a global property to allow the HCE process to see the validation status
                 navigator.navigateToNfcPage();
                 
             }
@@ -42,6 +43,7 @@ namespace FYPMobileApp.Views
             }
         }
 
+        //Mark the user as safe in response to the button
         protected void MarkAsSafe(object sender, System.EventArgs e)
         {
             RestService service = new RestService();

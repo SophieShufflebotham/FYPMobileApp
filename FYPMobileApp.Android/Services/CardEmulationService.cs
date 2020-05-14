@@ -28,9 +28,12 @@ MetaData("android.nfc.cardemulation.host_apdu_service", Resource = "@xml/aid_lis
             public NfcReaderFlags READER_FLAGS = NfcReaderFlags.NfcA | NfcReaderFlags.SkipNdefCheck;
             private static readonly string TAG = "AccessCardReader";
 
-            // AID for our loyalty card service.
+            // Smartcard Application Identifier (AID) for our service - keeps communication between our applications and not other ones
             private static readonly string ACCESS_CARD_AID = "FF69696969";
-            // ISO-DEP command HEADER for selecting an AID.
+
+            //Using IsoDep allows us to trancieve and exchange Application Data Units (APDUs)
+
+            // IsoDep command header for selecting an AID.
             // Format: [Class | Instruction | Parameter 1 | Parameter 2]
             private const String SELECT_APDU_HEADER = "00A40400";
 
@@ -40,7 +43,7 @@ MetaData("android.nfc.cardemulation.host_apdu_service", Resource = "@xml/aid_lis
             // "UNKNOWN" status word sent in response to invalid APDU command (0x0000)
             private static readonly byte[] UNKNOWN_CMD_SW = HexStringToByteArray("0000");
 
-            //"AUTH_FAILURE" status sent when fingerprint is not validated
+            //"AUTH_FAILURE" status word sent when fingerprint is not validated
             private static readonly byte[] AUTH_FAILURE_CMD_SW = HexStringToByteArray("9804");
 
             private static readonly byte[] SELECT_APDU = BuildSelectApdu(ACCESS_CARD_AID);
@@ -83,6 +86,7 @@ MetaData("android.nfc.cardemulation.host_apdu_service", Resource = "@xml/aid_lis
                     return AUTH_FAILURE_CMD_SW;
                     }
 
+                    //Get the Authentication and UserId properties from the global application properties
                     FingerprintAuthenticationResult authResult = Xamarin.Forms.Application.Current.Properties["AuthStatus"] as FingerprintAuthenticationResult;
                     string userId = Xamarin.Forms.Application.Current.Properties["UserId"] as string;
 
@@ -104,6 +108,8 @@ MetaData("android.nfc.cardemulation.host_apdu_service", Resource = "@xml/aid_lis
                     }
                     else
                     {
+                        //HCE service is open from the start - we can't prevent that
+                        //But we can prevent the transfer of data without prior authentication
                         Device.BeginInvokeOnMainThread(async () => {
                             await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Not Authenticated", "Please authenticate fingerprint before tapping to access point", "OK");
                         });
@@ -126,6 +132,7 @@ MetaData("android.nfc.cardemulation.host_apdu_service", Resource = "@xml/aid_lis
 
             }
 
+            //Reusable function to take a standard string and convert into an array of bytes that can be sent
             private static byte[] HexStringToByteArray(string s)
             {
                 int len = s.Length;
@@ -162,13 +169,15 @@ MetaData("android.nfc.cardemulation.host_apdu_service", Resource = "@xml/aid_lis
                 }
                 return s;
             }
-
+            
+            //APDU methods require an array of bytes to specific each portion of the command
             public static byte[] BuildSelectApdu(string aid)
             {
                 // Format: [CLASS | INSTRUCTION | PARAMETER 1 | PARAMETER 2 | LENGTH | DATA]
                 return HexStringToByteArray(SELECT_APDU_HEADER + (aid.Length / 2).ToString("X2") + aid);
             }
 
+            //Reusable function to concat the arrays of bytes that contain the APDU command and the payload
             public static byte[] ConcatArrays(byte[] first, params byte[][] rest)
             {
                 int totalLength = first.Length;
